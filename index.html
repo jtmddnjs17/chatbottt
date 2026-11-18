@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>알레르기 대처 가이드</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+        background-color: #f7faf7;
+        color: #333;
+        line-height: 1.7;
+    }
+
+    /* 전체 페이지 */
+    .container {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    /* 헤더 */
+    header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .logo {
+        color: #38865c;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: 30px;
+        color: #245c40;
+        margin-bottom: 12px;
+    }
+
+    header p {
+        color: #777;
+        font-size: 15px;
+    }
+
+    /* 응급 안내 */
+    .emergency {
+        background-color: #fff0ee;
+        border: 2px solid #e65b50;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        color: #b52f27;
+    }
+
+    .emergency h2 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .emergency p {
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    /* 증상 선택 카드 */
+    .section-title {
+        font-size: 21px;
+        color: #245c40;
+        margin-bottom: 8px;
+    }
+
+    .section-description {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .symptom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .symptom-card {
+        background-color: white;
+        border: 2px solid #e2eae3;
+        border-radius: 15px;
+        padding: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .symptom-card:hover {
+        border-color: #7bb995;
+        transform: translateY(-2px);
+    }
+
+    .symptom-card:has(input:checked) {
+        border-color: #409466;
+        background-color: #eff8f1;
+    }
+
+    .symptom-card input {
+        accent-color: #409466;
+        margin-right: 8px;
+        width: 17px;
+        height: 17px;
+    }
+
+    .symptom-card h3 {
+        font-size: 17px;
+        margin: 10px 0 5px;
+        color: #356e4d;
+    }
+
+    .symptom-card p {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .icon {
+        font-size: 28px;
+    }
+
+    /* 버튼 */
+    .button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background-color: #409466;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 25px;
+        transition: 0.2s;
+    }
+
+    .button:hover {
+        background-color: #2f754f;
+    }
+
+    /* 결과 */
+    #result {
+        display: none;
+        margin-top: 30px;
+    }
+
+    .result-card {
+        background-color: white;
+        border-radius: 15px;
+        padding: 25px;
+        border: 1px solid #dce9df;
+        margin-bottom: 15px;
+    }
+
+    .result-card h2 {
+        color: #2e7950;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .result-card ul {
+        padding-left: 22px;
+    }
+
+    .result-card li {
+        margin-bottom: 10px;
+    }
+
+    .urgent-result {
+        background-color: #fff1ef;
+        border: 2px solid #e65b50;
+        color: #a32d25;
+        border-radius: 15px;
+        padding: 22px;
+        margin-bottom: 15px;
+    }
+
+    .urgent-result h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .urgent-result p {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .reset-button {
+        background-color: white;
+        color: #409466;
+        border: 2px solid #409466;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .footer {
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+        margin-top: 35px;
+    }
+
+    /* 모바일 */
+    @media (max-width: 600px) {
+        .container {
+            padding: 25px 15px;
+        }
+
+        h1 {
+            font-size: 25px;
+        }
+
+        .symptom-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .symptom-card {
+            padding: 17px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="logo">🌿 BABY FOOD CARE</div>
+        <h1>알레르기 대처 가이드</h1>
+        <p>아기에게 나타난 증상을 선택하고 대처 방법을 확인해 보세요.</p>
+    </header>
+
+    <!-- 응급 경고 -->
+    <div class="emergency">
+        <h2>🚨 응급 상황 안내</h2>
+        <p>
+        호흡곤란, 의식 저하 등 응급증상이 있다면
+        챗봇 이용을 중단하고 즉시 119에 신고하세요.
+        </p>
+    </div>
+
+    <section>
+        <h2 class="section-title">아기에게 어떤 증상이 나타났나요?</h2>
+        <p class="section-description">
+            해당되는 증상을 모두 선택해 주세요.
+        </p>
+
+        <div class="symptom-grid">
+
+            <label class="symptom-card">
+                <input type="checkbox" value="skin">
+                <div class="icon">🩹</div>
+                <h3>두드러기 · 피부 발진</h3>
+                <p>붉은 반점, 가려움, 피부 부종</p>
+            </label>
+
+            <label class="symptom-card">
+                <input type="checkbox" value="stomach">
+                <div class="icon">🤢</div>
+                <h3>구토 · 설사 · 복통</h3>
+                <p>토하기, 설사, 배 아픔</p>
+            </label>
+
+            <label class="symptom-card">
+                <input type="checkbox" value="breathing">
+                <div class="icon">🫁</div>
+                <h3>기침 · 쌕쌕거림</h3>
+                <p>호흡곤란, 숨 가쁨, 목 조임</p>
+            </label>
+
+            <label class="symptom-card">
+                <input type="checkbox" value="consciousness">
+                <div class="icon">⚠️</div>
+                <h3>의식 저하 · 심한 어지럼증</h3>
+                <p>축 처짐, 반응 없음, 쓰러짐</p>
+            </label>
+
+        </div>
+
+        <button class="button" onclick="showAdvice()">
+            증상별 대처법 확인하기
+        </button>
+    </section>
+
+    <!-- 결과 표시 -->
+    <section id="result">
+
+        <div id="advice-content"></div>
+
+        <button class="reset-button" onclick="resetPage()">
+            증상 다시 선택하기
+        </button>
+
+    </section>
+
+    <div class="footer">
+        본 안내는 의료진의 진단 및 치료를 대체하지 않습니다.
+        증상이 악화되거나 판단이 어려운 경우 의료기관에 문의하세요.
+    </div>
+
+</div>
+
+<script>
+function showAdvice() {
+
+    const selected = document.querySelectorAll(
+        '.symptom-card input:checked'
+    );
+
+    if (selected.length === 0) {
+        alert("나타난 증상을 하나 이상 선택해 주세요.");
+        return;
+    }
+
+    const symptoms = Array.from(selected).map(item => item.value);
+
+    let html = "";
+
+    // 응급 증상 확인
+    const emergencySymptoms = symptoms.includes("breathing") ||
+                             symptoms.includes("consciousness");
+
+    if (emergencySymptoms) {
+        html += `
+            <div class="urgent-result">
+                <h2>🚨 응급 증상이 의심됩니다!</h2>
+                <p>
+                호흡곤란, 쌕쌕거림, 목이나 혀의 부종,
+                의식 저하 등은 심각한 알레르기 반응일 수 있습니다.
+                </p>
+                <p>
+                챗봇 이용을 중단하고 즉시 119에 신고하세요.
+                </p>
+                <ul>
+                    <li>아이를 혼자 두지 말고 상태를 확인하세요.</li>
+                    <li>처방받은 에피네프린 자가주사기가 있다면 지시에 따라 즉시 사용하세요.</li>
+                    <li>호흡이 힘들다면 편하게 숨 쉴 수 있는 자세를 취하게 하세요.</li>
+                    <li>의식이 없거나 구토 중이라면 옆으로 눕히세요.</li>
+                    <li>음식이나 물을 억지로 먹이지 마세요.</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 피부 증상
+    if (symptoms.includes("skin")) {
+        html += `
+            <div class="result-card">
+                <h2>🩹 피부 증상 대처법</h2>
+                <ul>
+                    <li>의심되는 음식을 즉시 중단하세요.</li>
+                    <li>입 주변이나 피부에 묻은 음식을 부드럽게 닦아주세요.</li>
+                    <li>피부 증상의 범위와 변화 여부를 관찰하세요.</li>
+                    <li>증상이 지속되거나 심해지면 의료진에게 진료받으세요.</li>
+                    <li>다른 증상이 함께 나타나는지 주의 깊게 확인하세요.</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 소화기 증상
+    if (symptoms.includes("stomach")) {
+        html += `
+            <div class="result-card">
+                <h2>🤢 소화기 증상 대처법</h2>
+                <ul>
+                    <li>의심되는 음식을 더 이상 먹이지 마세요.</li>
+                    <li>구토나 설사의 횟수와 증상을 확인하세요.</li>
+                    <li>반복적인 구토, 심한 복통, 혈변, 축 처짐이 있다면 즉시 진료가 필요합니다.</li>
+                    <li>수분 섭취가 가능하고 상태가 안정적이라면 소량씩 수분을 공급하세요.</li>
+                    <li>다른 증상이 동반되거나 상태가 나빠지면 즉시 119에 신고하세요.</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 호흡기 증상
+    if (symptoms.includes("breathing")) {
+        html += `
+            <div class="urgent-result">
+                <h2>🫁 호흡기 증상은 응급상황입니다!</h2>
+                <p>기침, 쌕쌕거림, 숨 가쁨, 목 조임은 심각한 알레르기 반응일 수 있습니다.</p>
+                <ul>
+                    <li>즉시 119에 신고하세요.</li>
+                    <li>처방된 에피네프린 자가주사기가 있다면 지시에 따라 사용하세요.</li>
+                    <li>아이의 호흡 상태를 계속 확인하세요.</li>
+                    <li>음식이나 약을 임의로 먹이지 마세요.</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 의식 관련 증상
+    if (symptoms.includes("consciousness")) {
+        html += `
+            <div class="urgent-result">
+                <h2>⚠️ 의식 저하는 응급상황입니다!</h2>
+                <p>반응이 없거나 심하게 축 처지고 쓰러지는 경우 즉시 응급조치가 필요합니다.</p>
+                <ul>
+                    <li>즉시 119에 신고하세요.</li>
+                    <li>아이의 호흡 여부를 확인하세요.</li>
+                    <li>호흡하고 있다면 옆으로 눕혀 기도를 보호하세요.</li>
+                    <li>정상적으로 호흡하지 않는다면 119 안내에 따라 심폐소생술을 실시하세요.</li>
+                    <li>음식이나 물을 먹이지 마세요.</li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // 여러 증상 동시 발생
+    if (symptoms.length >= 2) {
+        html += `
+            <div class="urgent-result">
+                <h2>⚠️ 여러 증상이 동시에 나타났어요</h2>
+                <p>
+                피부, 소화기, 호흡기 또는 전신 증상이 함께 나타나면
+                심각한 알레르기 반응일 수 있습니다.
+                </p>
+                <p>
+                증상이 빠르게 악화되거나 호흡곤란, 의식 저하가 있다면
+                즉시 119에 신고하세요.
+                </p>
+            </div>
+        `;
+    }
+
+    document.getElementById("advice-content").innerHTML = html;
+
+    const result = document.getElementById("result");
+    result.style.display = "block";
+
+    result.scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+function resetPage() {
+    document.querySelectorAll('.symptom-card input').forEach(input => {
+        input.checked = false;
+    });
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("advice-content").innerHTML = "";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+</script>
+
+</body>
+</html>
